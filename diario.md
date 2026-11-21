@@ -13,6 +13,6 @@
 - No hice nada no tuve tiempo
 
 ## 2026-11-21
-- Aprendí: 
-- No entendí: 
+- Aprendí: Aprendí a conectarme a git mediante la terminal, como crear los directorios, como subir el fichero hasta el repositorio de git, como ocultar los ficheros para no subirlos al repositorio
+- No entendí: Algunas dudas al conectar con Git Hub
 - Mañana: 
