@@ -54,7 +54,73 @@ Deberías ver: una URL tipo https://github.com/TU_USUARIO/diario-aprendizaje.
 ##Entender la conexión:
 -`git remote -v` muestra la conexión comenzando por "origin" al parecer la ruta origen del repositorio creado.
 
+##Crear fichero README.MD:
+-Para crear en VS Code `code README.md`. Se guarda el cambio con Cmd + S.
+-Para subir `git add README.md`, se genera el commit `git commit -m "Añado README.md", se publica con `git push`.
+-Abrir la web https://github.com/TU_USUARIO/diario-aprendizaje para ver que se ha subido.
 
+##Nota 1:
+-`add` sin `commit` no guarda nada en el historial, y sin historial no hay nada que publicar. El orden es siempre `add` → `commit` → `push`. Es lo mismo que comprobaste en el ejercicio 6, pero al revés.
 
+## Error al modificar el repositorio en la web de Git Hub directamente:
+- Texto: 
+To https://github.com/gpmed-pixel/diario-aprendizaje.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'https://github.com/gpmed-pixel/diario-aprendizaje.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
+- GitHub tiene commits que en local no están. Git se niega a hacer el push porque, si lo hiciera, borraría esos cambios de GitHub. Es una protección, no un fallo.
+### Cómo arreglarlo?
+-1. Mirar que hay en Git Hub que no en local:
+`git fetch` → descarga la información de GitHub pero no toca tus ficheros.
+`git log --oneline main..origin/main` → lista los commits que están en GitHub y no en local.
 
+-2. Trae esos cambios y poner los del local encima:
+`git pull --rebase` → coloca tus commits después de los de GitHub, como si los hubieras hecho más tarde, y deja un historial lineal.
+
+-3. Se sube:
+`git push`
+
+Si en el paso 2 sale “CONFLICT” significa que en local y en GitHub se han cambiado las mismas líneas del mismo fichero. Por ejemplo se ha borrado un fichero en Git Hub pero estás realizando una subida desde local de ese mismo fichero.
+
+Git no puede decidir solo si el fichero debe existir o desaparecer, así que te pide que decidas tú. Por eso se llama conflicto de tipo modify/delete.
+
+Estás a mitad de un rebase: Git ha pausado el proceso y espera tu decisión. Nada se ha perdido. Si en algún momento te lías:
+`git rebase --abort` → te devuelve exactamente a como estabas antes del `git pull --rebase`.
+
+Solución (quedarte con tu fichero)
+
+-1. Comprueba que tu versión está ahí:
+ `cat apuntes/git.md`
+
+-2. Dile a Git que el fichero se queda:
+
+`git add apuntes/git.md`
+
+Recuerda que `add` sirve para meter algo en la “orden de transporte”. Aquí además le dice a Git: “conflicto resuelto, quiero esta versión”.
+
+-3. Continúa el rebase:
+
+`git rebase --continue`
+
+Es probable que se abra vim (el editor raro de la Terminal) para que confirmes el mensaje del commit. Para guardar y salir sin cambiar nada, pulsa Esc, escribe `:wq` y pulsa Enter. Esta vez es `:wq` (guardar y salir), no `:q!` (salir sin guardar).
+
+-4. Comprueba:
+
+`git status`
+`git log --oneline`
+`git status` ya no debe decir rebase in progress.
+En el log debe aparecer arriba Delete apuntes/git.md y encima tus commits.
+
+-5.Sube:
+
+`git push`
+
+##Nota2:
+-Regla: trabaja solo en local, al menos durante este road map. Cada cambio en la web crea un commit que tu Mac no tiene, y acabas en situaciones como esta.
+Si alguna vez editas en la web: haz git pull antes de tocar nada en local.
+Tu commit bad8865 se llama “Corrección de Branch”. ¿Qué corregiste? Si el mensaje no lo explica, dentro de un mes no lo sabrás. Un buen mensaje dice qué cambia: por ejemplo, “Corrijo explicación de ramas en git.md”.
